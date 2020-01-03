@@ -18,13 +18,15 @@ class App < Sinatra::Base
     register Sinatra::Reloader
   end
 
-	get '/' do
+	get '/isAlive' do
 	  'Hello world!'
 	end
 
 	post '/process' do
 	  content_type :json
-	  params = json_params
+	  logger.info(params)
+	  # logger.info(json_params)
+	  # params = json_params
 
 	  @pdf_url = params['pdf']
 	  halt 422, "Missing PDF url" unless @pdf_url
@@ -44,12 +46,8 @@ class App < Sinatra::Base
 		JSON.pretty_generate(resp)
 	end
 
-	post '/fetch/:upload_id' do
-		content_type :json
-		# resp = fetch(json_params)
-	end
-
 	post '/cleanup/:upload_id' do
+		logger.info(params)
 		file_path = "public/#{params['upload_id']}"
 		resp = cleanup(file_path)
 
@@ -58,7 +56,11 @@ class App < Sinatra::Base
 
   def json_params
     begin
+    	puts ">>>>> begin"
+    	puts request.body.read
+    	puts JSON.parse(request.body.read)
       JSON.parse(request.body.read)
+    	puts ">>>>> end"
     rescue
       halt 400, { message:'Invalid JSON' }.to_json
     end
@@ -70,6 +72,8 @@ class App < Sinatra::Base
 			open(@pdf_url) do |hnd|
 			  File.open("#{@file_path}/#{@output_pdf}","wb") {|file| file.puts hnd.read }
 			end
+		rescue OpenURI::HTTPError => e
+			halt 422, "Bad PDF URL"
 		rescue Errno::EEXIST => e
 		  $stderr.puts "Caught the exception: #{e}"
 		  halt 422, "Upload folder already exists"

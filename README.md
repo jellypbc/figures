@@ -8,10 +8,10 @@ This is a sinatra microservice for running PDFFigures2 fat jar. It will extract 
 ### Steps to use this
 
 1. Build the docker image
-`docker build -t sinatra-demo .`
+`docker build -t big-iz .`
 
 2. Run the image to start the sinatra web host
-`docker run -p 80:4567 sinatra-demo`
+`docker run -p 80:4567 big-iz`
 
 Once it's running you can post to it like so:
 ```
