@@ -25,8 +25,6 @@ class App < Sinatra::Base
 	post '/process' do
 	  content_type :json
 	  logger.info(params)
-	  # logger.info(json_params)
-	  # params = json_params
 
 	  @pdf_url = params['pdf']
 	  halt 422, "Missing PDF url" unless @pdf_url
@@ -53,18 +51,6 @@ class App < Sinatra::Base
 
 		JSON.pretty_generate(resp)
 	end
-
-  def json_params
-    begin
-    	puts ">>>>> begin"
-    	puts request.body.read
-    	puts JSON.parse(request.body.read)
-      JSON.parse(request.body.read)
-    	puts ">>>>> end"
-    rescue
-      halt 400, { message:'Invalid JSON' }.to_json
-    end
-  end
 
 	def save_pdf
 		begin
@@ -114,7 +100,7 @@ class App < Sinatra::Base
 	  # 			`input_filename`
 	  # -f <value> | --figure-format <value>
 	  #       Format to save figures (default png)
-		puts ">>>> Running the jar"
+		puts ">>>> Running the pdffigures jar"
 		system("java -jar bin/pdffigures.jar -g #{@file_path}/ -m #{@file_path}/ #{@file_path}/#{@output_pdf}")
 	end
 
@@ -147,7 +133,7 @@ class App < Sinatra::Base
 		figures_array
 	end
 
-	# Celetes the generated files
+	# Deletes the generated files
 	def cleanup(file_path)
 		file_count = 0
 		if File.directory?(file_path)

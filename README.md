@@ -1,4 +1,4 @@
-# BigIz
+# Figures
 This is a sinatra microservice for running PDFFigures2 fat jar. It will extract the images and returns JSON with the URIs of the extracted images.
 
 ### Developing
@@ -8,10 +8,16 @@ This is a sinatra microservice for running PDFFigures2 fat jar. It will extract 
 ### Steps to use this
 
 1. Build the docker image
-`docker build -t big-iz .`
+`docker build -t figures .`
+
+and tag it:
+`docker image tag figures dluan/figures:0.0.3`
 
 2. Run the image to start the sinatra web host
-`docker run -p 80:4567 big-iz`
+`docker run -p 4567:4567 figures`
+
+Or if running on an external instance, forward 80.
+`docker run -p 80:4567 figures`
 
 Once it's running you can post to it like so:
 ```
