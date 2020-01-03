@@ -18,6 +18,10 @@ class App < Sinatra::Base
     register Sinatra::Reloader
   end
 
+	get '/' do
+	  'Hello world!'
+	end
+
 	get '/isAlive' do
 	  'Hello world!'
 	end
