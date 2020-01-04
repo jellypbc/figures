@@ -12,16 +12,12 @@ The API provides three main functions:
 
 ### Steps to use this
 
-1. Build the docker image
-`docker build -t figures .`
-
-and tag it:
-`docker image tag figures dluan/figures:0.0.5`
+1. Build the docker image `docker build -t figures .` and tag it: `docker image tag figures dluan/figures:0.0.5`
 
 2. Run the image to start the sinatra web host
 `docker run -p 4567:4567 dluan/figures:0.0.5`
 
-Or if running on an external instance, forward 80.
+Or if running on an external instance, forward port 80.
 `docker run -t --init --rm -p 80:4567 dluan/figures:0.0.5`
 
 3. Once it's running you can post to it like so:
