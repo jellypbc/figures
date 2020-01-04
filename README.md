@@ -17,7 +17,7 @@ and tag it:
 `docker run -p 4567:4567 figures`
 
 Or if running on an external instance, forward 80.
-`docker run -p 80:4567 figures`
+`docker run -t --init --rm -p 80:4567 figures`
 
 Once it's running you can post to it like so:
 ```

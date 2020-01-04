@@ -23,7 +23,7 @@ class App < Sinatra::Base
 	end
 
 	get '/isAlive' do
-	  'Hello world!'
+	  "Listening at #{request.host_with_port}"
 	end
 
 	post '/process' do
@@ -34,12 +34,13 @@ class App < Sinatra::Base
 	  halt 422, "Missing PDF url" unless @pdf_url
 
 	  @upload_id = params['upload_id']
-	  halt 422, "Missing upload" unless @upload_id
+	  halt 422, "Missing upload id" unless @upload_id
 
 		@file_path = "public/#{@upload_id}"
 		@output_pdf = "pdf.pdf"
 		@output_json = "pdf.json"
 
+		cleanup if File.directory?(@file_path)
 		save_pdf
 		run_jar
 		rename
@@ -49,9 +50,14 @@ class App < Sinatra::Base
 	end
 
 	post '/cleanup/:upload_id' do
+		content_type :json
 		logger.info(params)
-		file_path = "public/#{params['upload_id']}"
-		resp = cleanup(file_path)
+
+	  @upload_id = params['upload_id']
+	  halt 422, "Missing upload id" unless @upload_id
+
+		@file_path = "public/#{@upload_id}"
+		resp = cleanup
 
 		JSON.pretty_generate(resp)
 	end
@@ -109,7 +115,7 @@ class App < Sinatra::Base
 	end
 
 	def upload
-		puts ">>>> Upload figures to GCS"
+		# puts ">>>> Upload figures to GCS"
 		# require "google/cloud/storage"
 		# upload the images to GCS (make idempotent by backgrounding)
 		# gcloud = Gcloud.new GCLOUD_PROJECT, GCLOUD_KEYFILE
@@ -138,15 +144,15 @@ class App < Sinatra::Base
 	end
 
 	# Deletes the generated files
-	def cleanup(file_path)
+	def cleanup
 		file_count = 0
-		if File.directory?(file_path)
-			Dir.foreach(file_path) do |f|
+		if File.directory?(@file_path)
+			Dir.foreach(@file_path) do |f|
 				file_count += 1
-			  fn = File.join(file_path, f)
+			  fn = File.join(@file_path, f)
 			  File.delete(fn) if f != '.' && f != '..'
 			end
-			Dir.delete(file_path)
+			Dir.delete(@file_path)
 			msg = "Cleaned up #{file_count} files"
 		else
 			halt 422, "No directory"
@@ -156,5 +162,3 @@ class App < Sinatra::Base
 
   run! if app_file == $0
 end
-
-
