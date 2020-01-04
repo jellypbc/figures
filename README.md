@@ -1,6 +1,11 @@
 # Figures
 This is a sinatra microservice for running PDFFigures2 fat jar. It will extract the images and returns JSON with the URIs of the extracted images.
 
+The API provides three main functions:
+1. `/process` to extract figures from a given PDF URL
+2. an image server for the assets
+3. `/cleanup` to remove the assets
+
 ### Developing
 
 `RACK_ENV=development be rackup -p 4567` starts the server.
