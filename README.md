@@ -8,7 +8,7 @@ The API provides three main functions:
 
 ### Developing
 
-`RACK_ENV=development be rackup -p 4567` starts the server.
+`RACK_ENV=development bundle exec rackup -p 4567` starts the server.
 
 ### Steps to use this
 
