@@ -27,3 +27,8 @@ curl localhost:4567/process -X POST -H "Content-Type: application/json" -d '{"pd
 
 ### Deploying
 This can be deployed on Heroku or GCE. It is also avilable as an image on docker hub: https://hub.docker.com/repository/docker/dluan/figures.
+
+
+### License
+
+The jellypbc project is dual-licensed under [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0) and [MIT](https://opensource.org/licenses/MIT) terms.
